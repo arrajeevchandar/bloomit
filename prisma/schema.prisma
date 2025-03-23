@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+model User {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  name     String?
+  email    String  @unique
+  password String?
+  role     String  // "buyer" or "seller"
+  phno     String  // New field for phone number
+  createdAt DateTime @default(now())
+
+  // Add this relation field
+  ads      Ad[]    @relation("UserAds") 
+}
+
+model Ad {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  price       Float
+  images      String[] // Store image URLs
+  userId      String   @db.ObjectId  // Foreign key for seller
+  createdAt   DateTime @default(now())
+
+  // Define the opposite relation field
+  user        User     @relation("UserAds", fields: [userId], references: [id])
+}
