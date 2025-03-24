@@ -18,7 +18,7 @@ export default async function Home() {
     <div>
      
       <HeroSection />
-      <div className="grid grid-cols-3 gap-6 p-10">
+      <div className="grid grid-cols-3 gap-6 p-10 ">
         {ads?.length > 0 ? (
           ads.map((ad) => (
             <AdCard key={ad.id ?? ad._id} ad={ad} />

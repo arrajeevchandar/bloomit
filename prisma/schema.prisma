@@ -12,7 +12,7 @@ model User {
   email    String  @unique
   password String?
   role     String  // "buyer" or "seller"
-  phno     String  // New field for phone number
+ 
   createdAt DateTime @default(now())
 
   // Add this relation field
@@ -26,8 +26,14 @@ model Ad {
   price       Float
   images      String[] // Store image URLs
   userId      String   @db.ObjectId  // Foreign key for seller
+  phno        String  // New field for phone number
   createdAt   DateTime @default(now())
 
   // Define the opposite relation field
   user        User     @relation("UserAds", fields: [userId], references: [id])
+}
+model TempRole {
+  id        String   @id @map("_id") @default(auto()) @db.ObjectId // Corrected for MongoDB
+  role      String                                                  // Assigned role
+  createdAt DateTime @default(now())                               // Timestamp
 }

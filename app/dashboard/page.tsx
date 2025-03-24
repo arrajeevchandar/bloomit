@@ -16,7 +16,7 @@ export default function Dashboard() {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [images, setImages] = useState<File[]>([]);
-  
+  const [phno, setPhone] = useState("");
   useEffect(() => {
     if (status === "unauthenticated") router.push("/auth/signin");
     fetchAds();
@@ -52,7 +52,8 @@ export default function Dashboard() {
       title,
       description,
       price: parseFloat(price),
-      images: base64Images, // Temporary URLs (replace with actual upload logic)
+      images: base64Images,
+      phno, // Temporary URLs (replace with actual upload logic)
     };
     try {
     const res = await fetch("/api/ads", {
@@ -75,6 +76,7 @@ export default function Dashboard() {
       setDescription("");
       setPrice("");
       setImages([]);
+      setPhone("");
     } 
   } catch (error) {
     console.error("Failed to post ad:", error);
@@ -94,6 +96,8 @@ export default function Dashboard() {
             <Input placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
             <Textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} required />
             <Input placeholder="Price" type="number" value={price} onChange={(e) => setPrice(e.target.value)} required />
+            <Input placeholder="Phone Number" value={phno} onChange={(e) => setPhone(e.target.value)} required />
+            
             <Input type="file" multiple accept="image/*" onChange={handleImageChange} />
             <div className="flex gap-2 overflow-x-auto mt-2">
               {images.map((image, index) => (
@@ -116,6 +120,7 @@ export default function Dashboard() {
                 <h3 className="font-semibold text-lg">{ad.title}</h3>
                 <p>{ad.description}</p>
                 <p className="text-sm text-gray-500">Price: ${ad.price}</p>
+                <p className="text-blue-600 font-medium">📞 {ad.phno}</p>  {/* ✅ Display Phone Number */}
                 {ad.images.length > 0 && (
                   <div className="flex gap-2 mt-2">
                     {ad.images.map((img, index) => (

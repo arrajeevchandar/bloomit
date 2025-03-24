@@ -13,9 +13,9 @@ export default function Navbar() {
   const firstLetter = userName ? userName.charAt(0).toUpperCase() : "?";
 
   return (
-    <nav className="flex justify-between items-center py-4 px-6 bg-white shadow-md">
+    <nav className="flex justify-between items-center py-4 px-6 bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg">
       {/* Logo */}
-      <Link href="/" className="text-2xl font-bold text-blue-600">
+      <Link href="/" className="text-2xl font-bold text-white">
         Bloomit
       </Link>
 
@@ -24,7 +24,7 @@ export default function Navbar() {
         {session ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="flex items-center gap-2">
+              <Button variant="primary" className="flex text-black items-center ">
                 <Avatar className="w-8 h-8">
                   <AvatarImage src={session.user?.image || ""} />
                   <AvatarFallback>{firstLetter}</AvatarFallback>
@@ -32,16 +32,20 @@ export default function Navbar() {
                 {userName} ({userRole})
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="bg-white shadow-lg rounded-md">
               <DropdownMenuItem asChild>
-                <Link href="/dashboard">Dashboard</Link>
+                <Link href="/dashboard" className="px-4 py-2 hover:bg-gray-200">
+                  Dashboard
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => signOut()}>Logout</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => signOut()} className="px-4 py-2 hover:bg-gray-200">
+                Logout
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
           <>
-          <Link href="/auth/signin">
+            <Link href="/auth/signin">
               <Button>Sign In</Button>
             </Link>
             

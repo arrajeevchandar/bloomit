@@ -60,12 +60,12 @@ export default function SignInPage() {
               <Input id="password" name="password" type="password" required />
             </div>
             {error && <p className="text-red-500 text-sm">{error}</p>}
-            <Button type="submit" className="w-full mt-2" disabled={loading}>
+            <Button variant="outline" type="submit" className="w-full mt-2 text-white" disabled={loading}>
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Sign In"}
             </Button>
           </form>
           <div className="mt-4">
-            <Button variant="outline" className="w-full flex items-center gap-2" onClick={handleGoogleSignIn}>
+            <Button variant="outline" className="w-full flex items-center gap-2 text-white" onClick={handleGoogleSignIn}>
               <FcGoogle className="w-5 h-5" />
               Sign in with Google
             </Button>

@@ -24,8 +24,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unauthorized: No user ID found" }, { status: 401 });
   }
 
-  const { title, description,images, price } = await req.json();
-
+  const { title, description,images,phno, price } = await req.json();
+ 
+  
   if (session.user.role !== "seller") {
     return NextResponse.json({ error: "Permission denied" }, { status: 403 });
   }
@@ -37,6 +38,7 @@ export async function POST(req: Request) {
         description,
         price,
         images,
+        phno,
         userId: String(session.user.id),  // Ensure this is valid
       },
     });

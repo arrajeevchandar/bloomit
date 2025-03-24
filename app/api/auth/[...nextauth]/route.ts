@@ -3,7 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-
+import {parse} from "cookie";
 const prisma = new PrismaClient();
 
 export const authOptions = {
@@ -19,12 +19,8 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error("Email and password are required");
-        }
-
         const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
+          where: { email: credentials?.email },
         });
 
         if (!user || !user.password) {
@@ -34,57 +30,49 @@ export const authOptions = {
         const isValid = await bcrypt.compare(credentials.password, user.password);
         if (!isValid) throw new Error("Invalid credentials");
 
-        return {
-          id: user.id.toString(),
-          name: user.name,
-          email: user.email,
-          role: user.role,
-        };
+        return user;
       },
     }),
   ],
 
   callbacks: {
-    async signIn({ user, account }) {
-      if (account?.provider === "google") {
-        let existingUser = await prisma.user.findUnique({
-          where: { email: user.email! },
-        });
+    async signIn({ user}) {
+      const tempRole = await prisma.TempRole.findFirst({
+        orderBy: { createdAt: "desc" }, // Fetch the latest record
+      }); // Fetches any role from the collection
+      const role = tempRole?.role;
+      let existingUser = await prisma.user.findUnique({
+        where: { email: user.email! },
+      });
 
-        if (!existingUser) {
-          existingUser = await prisma.user.create({
-            data: {
-              email: user.email!,
-              name: user.name,
-              role: "buyer", // Default role
-            },
-          });
-        }
-        user.id = existingUser.id;
-        user.role = existingUser.role;
+      if (!existingUser) {
+        existingUser = await prisma.user.create({
+          data: {
+            email: user.email!,
+            name: user.name,
+            role,
+          },
+        });
       }
+      await prisma.TempRole.deleteMany({});
+      console.log("Role delted successfully:");
+  
       return true;
     },
 
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id || token.id;
-        token.role = user.role || token.role;
-      }
-      return token;
-    },
-
-    async session({ session, token }) {
+    async session({ session }) {
       if (session.user) {
-        session.user.id = token.id || "";
-        session.user.role = token.role || "buyer"; // Default to 'buyer' if missing
+        const dbUser = await prisma.user.findUnique({
+          where: { email: session.user.email! },
+        });
+
+        if (dbUser) {
+          session.user.id = dbUser.id;
+          session.user.role = dbUser.role;
+        }
       }
       return session;
     },
-  },
-
-  session: {
-    strategy: "jwt",
   },
 
   secret: process.env.NEXTAUTH_SECRET,
