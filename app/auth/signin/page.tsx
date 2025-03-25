@@ -44,7 +44,7 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gray-1000">
       <Card className="w-full max-w-sm p-6 shadow-xl rounded-lg bg-white">
         <CardHeader>
           <CardTitle className="text-center text-lg font-semibold">Sign In</CardTitle>
