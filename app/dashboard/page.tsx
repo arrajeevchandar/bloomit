@@ -86,7 +86,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gray-100 p-4">
+    <div className="flex flex-col items-center min-h-screen bg-gray-1000 p-4">
       <Card className="w-full max-w-md shadow-lg mb-6">
         <CardHeader>
           <CardTitle className="text-center text-2xl">Post an Ad</CardTitle>
@@ -119,7 +119,7 @@ export default function Dashboard() {
               <Card key={ad.id} className="p-4">
                 <h3 className="font-semibold text-lg">{ad.title}</h3>
                 <p>{ad.description}</p>
-                <p className="text-sm text-gray-500">Price: ${ad.price}</p>
+                <p className="text-sm text-gray-500">Price: ₹{ad.price}</p>
                 <p className="text-blue-600 font-medium">📞 {ad.phno}</p>  {/* ✅ Display Phone Number */}
                 {ad.images.length > 0 && (
                   <div className="flex gap-2 mt-2">
