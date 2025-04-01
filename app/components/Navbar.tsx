@@ -33,11 +33,14 @@ export default function Navbar() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="bg-white shadow-lg rounded-md">
-              <DropdownMenuItem asChild>
-                <Link href="/dashboard" className="px-4 py-2 hover:bg-gray-200">
-                  Dashboard
-                </Link>
-              </DropdownMenuItem>
+              {/* Show Dashboard only for sellers */}
+              {userRole === "seller" && (
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard" className="px-4 py-2 hover:bg-gray-200">
+                    Dashboard
+                  </Link>
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem onClick={() => signOut()} className="px-4 py-2 hover:bg-gray-200">
                 Logout
               </DropdownMenuItem>

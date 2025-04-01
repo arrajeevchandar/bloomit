@@ -93,7 +93,7 @@ export default function SignUp() {
       body: JSON.stringify({  role }),
     });
 
-    signIn("google");
+    signIn("google",{ callbackUrl: "/auth/signin" });
   }}
 ><FcGoogle className="w-5 h-5" />
   Sign Up with Google

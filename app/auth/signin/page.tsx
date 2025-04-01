@@ -14,6 +14,18 @@ export default function SignInPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+  
+  const handleRedirect = async () => {
+    const res = await fetch("/api/auth/session");
+    const session = await res.json();
+    const role = session?.user?.role; // Ensure role exists in session
+
+    if (role === "seller") {
+      router.push("/dashboard");
+    } else {
+      router.push("/");
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,13 +46,14 @@ export default function SignInPage() {
       setError(res.error);
       setLoading(false);
     } else {
-      router.push("/dashboard");
+      await handleRedirect();
     }
   };
 
   const handleGoogleSignIn = async () => {
     setLoading(true);
     await signIn("google");
+    await handleRedirect();
   };
 
   return (
