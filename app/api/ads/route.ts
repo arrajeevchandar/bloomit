@@ -5,9 +5,11 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 export async function GET() {
+  const session = await getServerSession(authOptions);
+  const userId = session.user.id;
   try {
     const ads = await prisma.ad.findMany({
-      orderBy: { createdAt: "desc" },
+      where: { userId }, // Fetch only ads posted by this user
     });
     return NextResponse.json(ads, { status: 200 });
   } catch (error) {
