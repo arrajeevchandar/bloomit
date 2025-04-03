@@ -26,7 +26,21 @@ export default function Dashboard() {
     const res = await fetch("/api/ads");
     if (res.ok) setAds(await res.json());
   };
-
+  const handleDeleteAd = async (adId: string) => {
+    const confirmDelete = confirm("Are you sure you want to delete this ad?");
+    if (!confirmDelete) return;
+  
+    const res = await fetch(`/api/ads/${adId}`, {
+      method: "DELETE",
+    });
+  
+    if (res.ok) {
+      alert("Ad deleted successfully!");
+      setAds((prevAds) => prevAds.filter((ad) => ad.id !== adId)); // Update UI
+    } else {
+      alert("Failed to delete ad.");
+    }
+  };
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) setImages([...images, ...Array.from(e.target.files)]);
   };
@@ -47,7 +61,8 @@ export default function Dashboard() {
     });
   
     const base64Images = await Promise.all(imagePromises);
-  
+    
+    
     const adData = {
       title,
       description,
@@ -128,6 +143,13 @@ export default function Dashboard() {
                     ))}
                   </div>
                 )}
+                 <Button 
+      variant="destructive" 
+      onClick={() => handleDeleteAd(ad.id)} 
+      className="mt-2"
+    >
+      Delete
+    </Button>
               </Card>
             ))}
           </div>
