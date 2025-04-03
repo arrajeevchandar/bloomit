@@ -2,9 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "../../../../lib/db";// Ensure correct import path
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../../app/api/auth/[...nextauth]/route";
-export async function GET(
-  req: Request,
-  context: { params: { id: string } } // ✅ Correct way to accept `params`
+export async function GET(req: Request,context: { params: { id: string } } // ✅ Correct way to accept `params`
 ) {
   const { params } = context; 
   const { id } = await params; // ✅ Await `params` in Next.js 15
