@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import { useRef } from "react";
 import { useParams } from "next/navigation";
@@ -12,10 +13,11 @@ import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { Ad } from "@prisma/client";
 
 export default function AdDetails() {
-  const { id } = useParams(); 
-  const [ad, setAd] = useState(null);
+  const { id } = useParams();
+  const [ad, setAd] = useState<Ad | null>(null);
   const [loading, setLoading] = useState(true);
   const prevRef = useRef(null);
   const nextRef = useRef(null);
@@ -23,7 +25,7 @@ export default function AdDetails() {
   useEffect(() => {
     async function fetchAd() {
       setLoading(true);
-      const res = await fetch(`/api/ads/${id}`);
+      const res = await fetch(`/api/ads/id?id=${id}`);
       if (res.ok) {
         const data = await res.json();
         setAd(data);
@@ -49,7 +51,11 @@ export default function AdDetails() {
     );
   }
 
-  const whatsappLink = ad.phno? `https://wa.me/${ad.phno}?text=${encodeURIComponent(`Hi, I'm interested in your ad: ${ad.title}`)}`: "#";
+  const whatsappLink = ad.phno
+    ? `https://wa.me/${ad.phno}?text=${encodeURIComponent(
+        `Hi, I'm interested in your ad: ${ad.title}`
+      )}`
+    : "#";
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -122,16 +128,16 @@ export default function AdDetails() {
           <CardTitle className="text-3xl font-bold">{ad.title}</CardTitle>
           <p className="text-gray-600 text-lg">₹{ad.price}</p>
           <div className="flex gap-4 mt-4">
-          <a 
-  href={whatsappLink} 
-  target="_blank" 
-  rel="noopener noreferrer"
-  className={ad.phno ? "" : "pointer-events-none opacity-50"}
->
-  <Button variant="default" disabled={!ad.phno}>
-    Chat on WhatsApp
-  </Button>
-</a>
+            <a
+              href={whatsappLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={ad.phno ? "" : "pointer-events-none opacity-50"}
+            >
+              <Button variant="default" disabled={!ad.phno}>
+                Chat on WhatsApp
+              </Button>
+            </a>
           </div>
           <p className="text-gray-600 text-lg">{ad.description}</p>
         </CardContent>

@@ -1,10 +1,9 @@
-import { NextResponse } from "next/server";
-import prisma from "../../../../lib/db";// Ensure correct import path
+import { NextRequest, NextResponse } from "next/server";
+import prisma from "../../../../lib/db"; // Ensure correct import path
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../../../app/api/auth/[...nextauth]/route";
-export async function GET(req: Request,params: { params: { id: string } } // ✅ Correct way to accept `params`
-) {
-  const { id } = await params; // ✅ Await `params` in Next.js 15
+import { authOptions } from "../../auth/[...nextauth]/route";
+export async function GET(req: NextRequest) {
+  const id = req.nextUrl.searchParams.get("id");
 
   if (!id) {
     return NextResponse.json({ error: "ID is required" }, { status: 400 });
@@ -22,12 +21,16 @@ export async function GET(req: Request,params: { params: { id: string } } // ✅
     return NextResponse.json(ad);
   } catch (error) {
     console.error("Database error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }
-export async function DELETE(req: Request, context: { params: { id: string } } // ✅ Correct way to accept `params`
-) {
+export async function DELETE(req: NextRequest) {
   const session = await getServerSession(authOptions);
+
+  const id = req.nextUrl.searchParams.get("id") as string;
 
   console.log("Session Data:", session); // Debugging
 
@@ -35,11 +38,8 @@ export async function DELETE(req: Request, context: { params: { id: string } } /
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { params } = context; 
-  const { id } = await params;
-
   try {
-    const ad = await prisma.ad.findUnique({ where: { id} });
+    const ad = await prisma.ad.findUnique({ where: { id } });
 
     if (!ad) {
       return NextResponse.json({ error: "Ad not found" }, { status: 404 });
@@ -49,7 +49,7 @@ export async function DELETE(req: Request, context: { params: { id: string } } /
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    await prisma.ad.delete({ where: { id} });
+    await prisma.ad.delete({ where: { id } });
 
     return NextResponse.json({ message: "Ad deleted successfully" });
   } catch (error) {
