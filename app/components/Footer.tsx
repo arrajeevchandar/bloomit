@@ -22,21 +22,7 @@ export default function Footer() {
               <Link href="/" className="hover:underline">
                 Home
               </Link>
-            </li>
-            <li>
-              <Link href="/about" className="hover:underline">
-                About Us
-              </Link>
-            </li>
-            <li>
-              <Link href="/ads" className="hover:underline">
-                Explore Ads
-              </Link>
-            </li>
-            <li>
-              <Link href="/contact" className="hover:underline">
-                Contact
-              </Link>
+           
             </li>
           </ul>
         </div>
@@ -64,7 +50,7 @@ export default function Footer() {
 
         <div>
           <h4 className="font-semibold mb-2">Get in Touch</h4>
-          <p className="text-sm">bloomit@example.com</p>
+          <p className="text-sm">www.bloomit.com</p>
           <p className="text-sm mt-1">+91 98765 43210</p>
           <Button variant="outline" className="mt-3 text-white border-white hover:bg-white hover:text-blue-500">
             Contact Support
