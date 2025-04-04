@@ -84,13 +84,13 @@ export default function AdDetails() {
             {ad.images?.length > 0 ? (
               ad.images.map((image: string, index: number) => (
                 <SwiperSlide key={index}>
-                  <Image
-                    src={image}
-                    width={800}
-                    height={500}
-                    alt={ad.title}
-                    className="w-full h-96 object-cover rounded-lg"
-                  />
+                <Image
+  src={image}
+  width={800}
+  height={500}
+  alt={ad.title}
+  className="w-full h-96 object-contain rounded-lg bg-black"
+/>
                 </SwiperSlide>
               ))
             ) : (
