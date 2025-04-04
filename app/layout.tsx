@@ -3,6 +3,7 @@
 import { SessionProvider } from "next-auth/react";
 import Navbar from "./components/Navbar";
 import "./globals.css";
+import Footer from "./components/Footer";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -41,6 +42,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <Navbar />
           <main className="container mx-auto p-6 text-white">{children}</main>
         </SessionProvider>
+        <Footer/>
       </body>
     </html>
   );
